@@ -1,2 +1,3 @@
 <Solution>
+  <Project Path="component-blazor.csproj" />
 </Solution>
