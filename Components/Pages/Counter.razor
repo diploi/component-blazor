@@ -18,5 +18,8 @@
     private void IncrementCount()
     {
         currentCount += IncrementAmount;
+        var apiKey = Environment.GetEnvironmentVariable("TEST_API_KEY");
+        Console.WriteLine($"API Key: {apiKey}");
     }
+
 }

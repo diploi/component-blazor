@@ -9,7 +9,7 @@ builder.Services.AddRazorComponents()
 
 // Configure data protection for Docker
 builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("/tmp/keys"))
+    .PersistKeysToFileSystem(new DirectoryInfo("/var/dpkeys"))
     .SetApplicationName("component-blazor");
 
 var app = builder.Build();

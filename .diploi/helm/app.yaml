@@ -41,8 +41,16 @@ spec:
           command: ['dotnet', 'restore']
           workingDir: /app{{ .Values.folder }}
           volumeMounts:
+            {{- if hasKey .Values.storage "code" }}
             - name: app-mount
               mountPath: /app
+            {{- end }}
+        - name: fix-permissions
+          image: {{ .Values.images.app }}
+          command: ['chown', '-R', '1000:1000', '/var/dpkeys']
+          volumeMounts:
+            - name: dataprotection-keys
+              mountPath: /var/dpkeys
       {{- end }}
       containers:
         - name: app
@@ -76,9 +84,28 @@ spec:
             - name: app-mount
               mountPath: /app
             {{- end }}
+            - name: dataprotection-keys
+              mountPath: /var/dpkeys
       volumes:
         {{- if hasKey .Values.storage "code" }}
         - name: app-mount
           hostPath:
             path: {{ .Values.storage.code.hostPath }}
         {{- end }}
+        - name: dataprotection-keys
+          persistentVolumeClaim:
+            claimName: dataprotection-keys-pvc
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dataprotection-keys-pvc
+spec:
+  storageClassName: efs-sc
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
