@@ -103,9 +103,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: dataprotection-keys-pvc
 spec:
-  storageClassName: efs-sc
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
