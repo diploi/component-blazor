@@ -45,12 +45,6 @@ spec:
             - name: app-mount
               mountPath: /app
             {{- end }}
-        - name: fix-permissions
-          image: {{ .Values.images.app }}
-          command: ['chown', '-R', '1000:1000', '/var/dpkeys']
-          volumeMounts:
-            - name: dataprotection-keys
-              mountPath: /var/dpkeys
       {{- end }}
       containers:
         - name: app
