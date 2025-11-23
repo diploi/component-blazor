@@ -6,16 +6,14 @@ COPY --chown=1000:1000 . /app
 
 WORKDIR $FOLDER
 
-# Create directory for data protection keys
-RUN mkdir -p /tmp/keys && chown 1000:1000 /tmp/keys
-
 USER  1000:1000
 
 EXPOSE 5054
 
-# Environment variables for Docker development
 ENV ASPNETCORE_URLS=http://+:5054
+
 ENV ASPNETCORE_ENVIRONMENT=Development
+
 ENV ASPNETCORE_HTTPS_PORT=""
 
 CMD [ "dotnet", "watch", "--no-launch-profile"]
