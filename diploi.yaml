@@ -1,0 +1,13 @@
+diploiVersion: v1.0
+type: component
+name: Blazor
+description: Official Diploi component for Blazor
+
+hosts:
+  - name: Blazor
+    identifier: app
+    urlFormat: "[label].[default-domain]"
+
+images:
+  - identifier: app
+    prebuildImage: ghcr.io/diploi/component-blazor:[tag]
