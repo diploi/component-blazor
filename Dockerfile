@@ -6,7 +6,9 @@ COPY . /app
 
 WORKDIR ${FOLDER}
 
-RUN dotnet publish component-blazor.csproj -c Release -o out
+RUN dotnet tool restore \
+    && dotnet tool run libman restore \
+    && dotnet publish component-blazor.csproj -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
