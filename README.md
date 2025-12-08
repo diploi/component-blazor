@@ -23,7 +23,7 @@ Link to the full guide - upcoming
 During development, the container uses `dotnet watch` to enable automatic reloads when files change. The development server is started with:
 
 ```sh
-dotnet watch --no-launch-profile
+dotnet watch --no-launch-profile --hot-reload --non-interactive
 ```
 
 This will:
@@ -31,6 +31,38 @@ This will:
 - Run the Blazor Server application with hot reload enabled.
 - Start the app on port 5054.
 - Enable automatic browser refresh when Razor components or CSS files change.
+
+### Installing Packages
+
+**Front-end libraries** (CSS/JS frameworks like Bootstrap, jQuery, etc.):
+
+First, ensure .NET tools are restored:
+```sh
+dotnet tool restore
+```
+
+Then install front-end libraries using LibMan:
+```sh
+dotnet tool run libman install <library>@<version> --provider cdnjs --destination wwwroot/lib/<library>
+```
+
+For example:
+```sh
+dotnet tool run libman install bootstrap@5.3.0 --provider cdnjs --destination wwwroot/lib/bootstrap
+dotnet tool run libman install jquery@3.7.1 --provider cdnjs --destination wwwroot/lib/jquery
+```
+
+**NuGet packages** (C# libraries and frameworks):
+```sh
+dotnet add package <PackageName>
+```
+For example:
+```sh
+dotnet add package Newtonsoft.Json
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+```
+
+The `libman.json` file manages client-side libraries, while the `.csproj` file tracks NuGet dependencies. Both are automatically restored during development and build.
 
 ### Production
  
