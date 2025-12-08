@@ -1,15 +1,34 @@
 {
-    "watch": {
-        "extensions": [
-            ".cs",
-            ".razor",
-            ".csproj"
-        ],
-        "include": [
-            "**/*.csproj"
-        ],
-        "runOnChanges": {
-            "**/*.csproj": "restart"
-        }
+  "watch": {
+    "extensions": [
+      ".cs",
+      ".razor",
+      ".csproj",
+      ".cshtml",
+      ".json"
+    ],
+    "include": [
+      "**/*.cs",
+      "**/*.razor",
+      "**/*.cshtml",
+      "**/*.csproj",
+      "appsettings*.json",
+      "Properties/launchSettings.json",
+      "wwwroot/**/*"
+    ],
+    "exclude": [
+      "**/bin/**",
+      "**/obj/**",
+      ".git/**"
+    ],
+    "runOnChanges": {
+      "**/*.cs": "restart",
+      "**/*.razor": "restart",
+      "**/*.cshtml": "restart",
+      "**/*.csproj": "restart",
+      "appsettings*.json": "restart",
+      "Properties/launchSettings.json": "restart",
+      "wwwroot/**/*": "restart"
     }
+  }
 }
