@@ -1,0 +1,15 @@
+{
+    "watch": {
+        "extensions": [
+            ".cs",
+            ".razor",
+            ".csproj"
+        ],
+        "include": [
+            "**/*.csproj"
+        ],
+        "runOnChanges": {
+            "**/*.csproj": "restart"
+        }
+    }
+}
