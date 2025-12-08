@@ -19,4 +19,4 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 
 ENV ASPNETCORE_HTTPS_PORT=""
 
-CMD [ "dotnet", "watch", "--no-launch-profile"]
+CMD ["dotnet", "watch", "--no-launch-profile", "--hot-reload", "--non-interactive"]
