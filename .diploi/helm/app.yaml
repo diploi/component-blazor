@@ -42,12 +42,8 @@ spec:
             - /bin/sh
             - -c
             - >
-              set -euo pipefail;
-              dotnet build;
-              dotnet tool restore;
-              if ! dotnet tool run libman restore; then
-                echo "libman restore failed but continuing pod startup" >&2;
-              fi
+              dotnet build || exit 1;
+              (dotnet tool restore && dotnet tool run libman restore) || echo "Libman restore failed, continuing...";
           workingDir: /app{{ .Values.folder }}
           volumeMounts:
             {{- if hasKey .Values.storage "code" }}
