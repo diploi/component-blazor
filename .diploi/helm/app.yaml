@@ -38,7 +38,16 @@ spec:
         - name: install-dependencies
           image: {{ .Values.images.app }}
           imagePullPolicy: Always
-          command: ["/bin/sh", "-c", "dotnet build && dotnet tool restore && dotnet tool run libman restore"]
+          command:
+            - /bin/sh
+            - -c
+            - >
+              set -euo pipefail;
+              dotnet build;
+              dotnet tool restore;
+              if ! dotnet tool run libman restore; then
+                echo "libman restore failed but continuing pod startup" >&2;
+              fi
           workingDir: /app{{ .Values.folder }}
           volumeMounts:
             {{- if hasKey .Values.storage "code" }}
