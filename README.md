@@ -64,6 +64,8 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 The `libman.json` file manages client-side libraries, while the `.csproj` file tracks NuGet dependencies. Both are automatically restored during development and build.
 
+> **Important:** Afterward, manually press the restart button on the running Blazor pod so it picks up the newly installed dependencies.
+
 ### Production
  
 Builds a production-ready image. During the build, dependencies are restored with `dotnet restore` and the application is published with `dotnet publish`. When the container starts, it runs:
