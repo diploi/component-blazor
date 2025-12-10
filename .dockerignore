@@ -48,8 +48,6 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # .NET build artifacts
-bin/
-obj/
 out/
 [Dd]ebug/
 [Rr]elease/
