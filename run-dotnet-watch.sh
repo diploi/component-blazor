@@ -48,4 +48,4 @@ dotnet build
 echo "=== Starting dotnet watch ==="
 exec dotnet watch run \
     --no-launch-profile \
-    --non-interactive \
+    --non-interactive
