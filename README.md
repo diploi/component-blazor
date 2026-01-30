@@ -20,12 +20,12 @@ Link to the full guide - upcoming
 
 ### Development
 
-During development, the container uses the combination of `nodemon` and `dotnet watch` to enable automatic reloads when files and new dependencies change. The development server is started with:
+During development, the container uses `nodemon` to enable automatic reloads when files and new dependencies change. The development server is started with:
 
 ```sh
-dotnet watch run \
+dotnet run \
     --no-launch-profile \
-    --non-interactive
+    --non-interactive 
 ```
 
 This will:
