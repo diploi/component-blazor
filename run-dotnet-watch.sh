@@ -3,17 +3,15 @@ set -eu
 
 PORT=5054
 
-echo "=== Ensuring clean shutdown ==="
-
-# Gracefully stop dotnet-related servers (Roslyn / MSBuild)
-dotnet build-server shutdown 2>/dev/null || true
-
 # Try graceful shutdown first
+echo "=== Checking if port ${PORT} is in use ==="
 if ss -ltnp 2>/dev/null | grep -q ":${PORT} "; then
     echo "Port ${PORT} is in use, attempting graceful shutdown..."
     pkill -TERM -f "dotnet watch" 2>/dev/null || true
     pkill -TERM -f "dotnet run" 2>/dev/null || true
     pkill -TERM -f "dotnet" 2>/dev/null || true
+    dotnet clean 2>/dev/null || true
+    sleep 2
 fi
 
 # Wait for port to be released (bounded wait)
@@ -23,7 +21,7 @@ for i in {1..50}; do
         echo "Port ${PORT} released."
         break
     fi
-    sleep 0.2
+    sleep 0.25
 done
 
 echo "=== Hard cleaning port ${PORT} if still busy ==="
@@ -31,21 +29,17 @@ echo "=== Hard cleaning port ${PORT} if still busy ==="
 if ss -ltn 2>/dev/null | grep -q ":${PORT} "; then
     echo "Port ${PORT} still busy, forcing release..."
     fuser -k ${PORT}/tcp 2>/dev/null || true
-    sleep 1
-fi
-
-# Additional cleanup for TIME_WAIT sockets
-echo "=== Checking for lingering TIME_WAIT sockets ==="
-if ss -ltn 2>/dev/null | grep -q ":${PORT}.*TIME-WAIT"; then
-    echo "Waiting for TIME_WAIT sockets to clear..."
     sleep 2
 fi
 
-echo "=== Starting to build ==="
-dotnet clean
-dotnet build
+# Check for TIME_WAIT sockets (use ss -tan to see all TCP states, not just LISTEN)
+echo "=== Checking for lingering TIME_WAIT sockets ==="
+if ss -tan state time-wait 2>/dev/null | grep -q ":${PORT} "; then
+    echo "TIME_WAIT sockets found on port ${PORT}, waiting briefly..."
+    sleep 2
+fi
 
-echo "=== Starting dotnet watch ==="
-exec dotnet watch run \
+echo "=== Starting running dotnet application"
+exec dotnet run \
     --no-launch-profile \
-    --non-interactive
+    --non-interactive 
