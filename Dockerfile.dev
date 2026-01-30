@@ -1,5 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends tini nodejs npm iproute2 net-tools \
+    && npm install -g nodemon \
+    && rm -rf /var/lib/apt/lists/*
+
 ARG FOLDER=/app
 
 COPY --chown=1000:1000 . /app
@@ -10,10 +15,14 @@ USER  1000:1000
 
 EXPOSE 5054
 
-ENV ASPNETCORE_URLS=http://+:5054
+ENV ASPNETCORE_URLS=http://0.0.0.0:5054
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 
 ENV ASPNETCORE_HTTPS_PORT=""
 
-CMD ["dotnet", "watch", "--no-launch-profile", "--hot-reload", "--non-interactive"]
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+CMD ["nodemon"]

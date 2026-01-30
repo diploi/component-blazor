@@ -1,11 +1,26 @@
 using component_blazor.Components;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.Configure<HostOptions>(options =>
+{
+    options.ShutdownTimeout = TimeSpan.FromSeconds(1);
+});
+
+// Configure Kestrel to allow port reuse and SO_REUSEADDR
+builder.WebHost.ConfigureKestrel((context, options) =>
+{
+    options.ListenAnyIP(5054, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+    });
+});
 
 // Configure data protection for Docker
 builder.Services.AddDataProtection()
