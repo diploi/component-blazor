@@ -1,0 +1,13 @@
+{
+    "watch": [
+        "."
+    ],
+    "ignore": [
+        "**/bin/**",
+        "**/obj/**"
+    ],
+    "ext": "cs,csproj,razor,cshtml,json,html,js,css",
+    "exec": "sh run-dotnet-watch.sh",
+    "signal": "SIGTERM",
+    "delay": "1000"
+}

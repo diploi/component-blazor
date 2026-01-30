@@ -20,17 +20,19 @@ Link to the full guide - upcoming
 
 ### Development
 
-During development, the container uses `dotnet watch` to enable automatic reloads when files change. The development server is started with:
+During development, the container uses `nodemon` to enable automatic reloads when files and new dependencies change. The development server is started with:
 
 ```sh
-dotnet watch --no-launch-profile --hot-reload --non-interactive
+dotnet run \
+    --no-launch-profile \
+    --non-interactive 
 ```
 
 This will:
 - Use `dotnet watch` to monitor for changes to .cs, .razor, and .css files and restart the server when changes are detected.
 - Run the Blazor Server application with hot reload enabled.
 - Start the app on port 5054.
-- Enable automatic browser refresh when Razor components or CSS files change.
+- Avoid using any launch profile so environment variables are controlled by the container.
 
 ### Installing Packages
 
@@ -64,7 +66,7 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 The `libman.json` file manages client-side libraries, while the `.csproj` file tracks NuGet dependencies. Both are automatically restored during development and build.
 
-> **Important:** After installing packages, open the Deployment page and restart the running Blazor container so it loads the new dependencies.
+`dotnet add package` updates the `.csproj` and restores the package to the local NuGet cache. `nodemon` notices the new package reference in `component-blazor.csproj` and restarts the runtime so the change is picked up immediately.
 
 ### Production
  

@@ -42,7 +42,7 @@ spec:
             - /bin/sh
             - -c
             - >
-              dotnet build || exit 1;
+              (dotnet restore && dotnet build) || exit 1;
               (dotnet tool restore && dotnet tool run libman restore) || echo "Libman restore failed, continuing...";
           workingDir: /app{{ .Values.folder }}
           volumeMounts:
@@ -78,6 +78,10 @@ spec:
             - name: {{ .identifier }}
               value: {{ .value | quote }}
             {{- end }}
+          {{- if eq .Values.stage "development" }}
+            - name: NUGET_PACKAGES
+              value: /app{{ .Values.folder }}/.nuget
+          {{- end }}
           volumeMounts:
             {{- if hasKey .Values.storage "code" }}
             - name: app-mount

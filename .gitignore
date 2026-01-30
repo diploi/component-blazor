@@ -484,3 +484,9 @@ docker-compose.override.yaml
 
 tmp/
 temp/
+
+# NuGet packages
+packages/
+*.nuget.props
+*.nuget.targets
+.nuget/
