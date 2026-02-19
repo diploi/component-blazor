@@ -3,11 +3,13 @@ type: component
 name: Blazor
 description: Official Diploi component for Blazor
 
+supportsAdditionalHosts: { serviceName: 'app'}
+
 hosts:
   - name: Blazor
     identifier: app
-    urlFormat: "[label].[default-domain]"
+    port: 5054
 
 images:
   - identifier: app
-    prebuildImage: ghcr.io/diploi/component-blazor:[tag]
+    prebuildImage: public.ecr.aws/p8t2q7f4/diploi/component-blazor:[tag]
