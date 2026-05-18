@@ -1,9 +1,5 @@
 apiVersion: apps/v1
-{{- if eq .Values.stage "development"}}
-kind: StatefulSet
-{{- else }}
 kind: Deployment
-{{- end }}
 metadata:
   name: app
   labels:
@@ -12,10 +8,10 @@ spec:
   selector:
     matchLabels:
       app: app
-  {{- if eq .Values.stage "development"}}
-  serviceName: app
-  {{- else }}
   strategy:
+  {{- if eq .Values.stage "development"}}
+    type: Recreate
+  {{- else }}
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 25%
@@ -56,20 +52,7 @@ spec:
           image: {{ .Values.images.app }}
           imagePullPolicy: Always
           ports:
-            - containerPort: 5054
-          {{- if eq .Values.stage "development"}}
-          resources:
-            requests:
-              memory: 1500Mi
-            limits:
-              memory: 2000Mi
-          {{- else }}
-          resources:
-            requests:
-              memory: 500Mi
-            limits:
-              memory: 1000Mi
-          {{- end }}
+            - containerPort: 5054          
           {{- if eq .Values.stage "development" }}
           workingDir: /app{{ .Values.folder }}
           {{- with .Values.containerCommands.developmentStart }}
@@ -89,10 +72,14 @@ spec:
           {{- end }}
           {{- end }}
           env:
-            {{- range .Values.env }}
+          {{- range .Values.env }}
             - name: {{ .identifier }}
               value: {{ .value | quote }}
-            {{- end }}
+          {{- end }}
+          {{- if eq .Values.stage "development" }}
+            - name: NUGET_PACKAGES
+              value: /app{{ .Values.folder }}/.nuget
+          {{- end }}
           volumeMounts:
             {{- if hasKey .Values.storage "code" }}
             - name: app-mount

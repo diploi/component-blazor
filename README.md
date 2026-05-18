@@ -64,7 +64,7 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 The `libman.json` file manages client-side libraries, while the `.csproj` file tracks NuGet dependencies. Both are automatically restored during development and build.
 
-> **Important:** After installing packages, open the Deployment page and restart the running Blazor container so it loads the new dependencies.
+> **Important:** Important: After running dotnet add package <PackageName>, always run dotnet build to resolve new dependency update.
 
 ### Production
  
